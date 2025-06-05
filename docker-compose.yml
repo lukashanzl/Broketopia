@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:15
+    container_name: broketopia-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "5433:5432"  # host:container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
