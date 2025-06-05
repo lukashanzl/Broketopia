@@ -1,0 +1,34 @@
+# === Node / Angular ===
+frontend/broketopia-ui/node_modules/
+frontend/broketopia-ui/dist/
+frontend/broketopia-ui/.angular/
+frontend/broketopia-ui/.env
+frontend/broketopia-ui/.env.*
+
+# === ASP.NET Core ===
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+
+# === Rider / JetBrains ===
+.idea/
+*.sln.iml
+
+# === Logs / Dumps / Temp ===
+*.log
+*.tmp
+*.pid
+*.bak
+
+# === Docker / Build / Misc ===
+docker/postgres-data/
+docker/volumes/
+.env
+.env.*
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
