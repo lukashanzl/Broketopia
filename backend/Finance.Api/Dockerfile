@@ -2,24 +2,20 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Copy solution and project files
-COPY *.sln ./
-COPY Finance.Api/*.csproj ./Finance.Api/
+# Copy csproj file
+COPY *.csproj ./
 
 # Restore dependencies
 RUN dotnet restore
 
-# Copy the rest of the code
-COPY Finance.Api/. ./Finance.Api/
+# Copy everything else
+COPY . ./
 
-# Publish the app
-WORKDIR /src/Finance.Api
+# Publish
 RUN dotnet publish -c Release -o /app/publish
 
-# Stage 2: Runtime
+# Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 COPY --from=build /app/publish .
-
-# Start the app
 ENTRYPOINT ["dotnet", "Finance.Api.dll"]
