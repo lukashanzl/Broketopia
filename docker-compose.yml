@@ -1,14 +1,34 @@
 services:
   db:
     image: postgres:15
-    container_name: broketopia-db
-    restart: unless-stopped
+    container_name: broketopia_db
     env_file:
       - .env
-    ports:
-      - "5433:5432"  # host:container
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    ports:
+      - "5433:5432"  # host:container
+
+  backend:
+    image: broketopia/finance-backend:latest
+    container_name: broketopia_backend
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - ConnectionStrings__DefaultConnection=${DEFAULT_CONNECTION}
+    ports:
+      - "5000:80"
+    restart: unless-stopped
+
+  frontend:
+    image: broketopia/finance-frontend:latest
+    container_name: broketopia_frontend
+    ports:
+      - "4200:80"
+    restart: unless-stopped
 
 volumes:
   postgres_data:
