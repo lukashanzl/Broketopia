@@ -1,8 +1,9 @@
-name: CI/CD Pipeline
+name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -10,30 +11,25 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build and push backend
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/finance-backend:latest ./backend/Finance.Api
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/finance-backend:latest
+          docker build -t youruser/finance-backend:latest ./backend/Finance.Api
+          docker push youruser/finance-backend:latest
 
       - name: Build and push frontend
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/finance-frontend:latest ./frontend/broketopia-ui
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/finance-frontend:latest
+          docker build -t youruser/finance-frontend:latest ./frontend/broketopia-ui
+          docker push youruser/finance-frontend:latest
 
-      - name: Deploy on remote server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VM_HOST }}
-          username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd ~/Broketopia
-            git pull
-            docker-compose pull
-            docker-compose down
-            docker-compose up -d --build
+      - name: Deploy on VM
+        run: |
+          cd ~/Broketopia
+          git pull
+          docker-compose pull
+          docker-compose down
+          docker-compose up -d --build
