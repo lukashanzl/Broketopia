@@ -17,7 +17,7 @@ services:
     depends_on:
       - db
     env_file:
-      - .env
+      - backend/Finance.Api/app.env
     environment:
       - ConnectionStrings__DefaultConnection=${DEFAULT_CONNECTION}
     ports:
