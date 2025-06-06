@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 // Load environment variables from .env file
-var envPath = Path.Combine(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName)!.FullName, ".env");
+var envPath = Path.Combine(Directory.GetCurrentDirectory(), "app.env");
 DotNetEnv.Env.Load(envPath);
 
 var builder = WebApplication.CreateBuilder(args);

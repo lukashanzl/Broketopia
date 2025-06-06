@@ -2,6 +2,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
+# Copy environment file
+COPY app.env ./
+
 # Copy csproj file
 COPY *.csproj ./
 
