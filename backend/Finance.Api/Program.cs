@@ -35,6 +35,9 @@ var env = app.Environment;
 // 🧩 Middleware to add a correlation ID to each request
 app.UseMiddleware<Finance.Api.CorrelationIdMiddleware>();
 
+// ensure controllers are mapped
+app.MapControllers();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
