@@ -11,7 +11,8 @@ services:
       - "5433:5432"  # host:container
 
   backend:
-    image: broketopia/finance-backend:latest
+    build:
+      context: ./backend/Finance.Api
     container_name: broketopia_backend
     depends_on:
       - db
