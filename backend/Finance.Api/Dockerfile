@@ -16,8 +16,10 @@ RUN dotnet publish -c Release -o /app/publish
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
+
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y curl
+
 WORKDIR /app
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "Finance.Api.dll"]
-
-RUN apk add --no-cache curl
