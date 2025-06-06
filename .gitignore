@@ -28,6 +28,7 @@ docker/postgres-data/
 docker/volumes/
 .env
 .env.*
+*.env
 
 # === OS Files ===
 .DS_Store
