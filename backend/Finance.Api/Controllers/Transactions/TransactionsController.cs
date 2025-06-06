@@ -1,11 +1,14 @@
+using System.Security.Claims;
 using Finance.Api.Business.Interfaces;
 using Finance.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Finance.Api.Controllers.Transactions;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize] // 🔐 This secures all endpoints in this controller
 public class TransactionsController : ControllerBase
 {   
     private readonly ITransactionService _transactionService;
@@ -22,13 +25,15 @@ public class TransactionsController : ControllerBase
     /// </summary>
     /// <param name="userId">The user ID as a string (GUID format)</param>
     /// <returns>A list of transactions</returns>
-    [HttpGet("{userId}")]
-    public async Task<ActionResult<List<Transaction>>> GetUserTransactions(string userId)
+    [HttpGet]
+    public async Task<ActionResult<List<Transaction>>> GetUserTransactions()
     {
-        if (!Guid.TryParse(userId, out var parsedUserId))
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var parsedUserId))
         {
-            _logger.LogError("Invalid input for user id: {UserId}", userId);
-            return BadRequest("Invalid user ID format.");
+            _logger.LogError("Invalid user ID in JWT.");
+            return Unauthorized("Invalid user token.");
         }
 
         var transactions = await _transactionService.GetUserTransactions(parsedUserId);

@@ -3,7 +3,9 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Finance.Api.Data;
 using DotNetEnv;
+using Finance.Api.Helpers;
 using Finance.Api.Models;
+using Finance.Api.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 // Load environment variables from .env file
-var envPath = Path.Combine(Directory.GetCurrentDirectory(), "app.env");
+var envPath = Path.Combine(AppContext.BaseDirectory, "app.env");
 DotNetEnv.Env.Load(envPath);
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +31,10 @@ builder.Services.AddDbContext<FinanceDbContext>(options =>
 });
 
 // add authentication and authorization services
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JWT"));
+
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<FinanceDbContext>()
     .AddDefaultTokenProviders();
