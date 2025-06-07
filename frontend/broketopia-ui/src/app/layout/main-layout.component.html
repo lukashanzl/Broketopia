@@ -1,0 +1,19 @@
+<mat-toolbar color="primary">
+  <span>Broketopia</span>
+  <span class="spacer"></span>
+  <button mat-button @if(!auth.isLoggedIn()) routerLink="/login">Login</button>
+  <button mat-button @if(auth.isLoggedIn()) (click)="logout()">Logout</button>
+</mat-toolbar>
+
+<mat-sidenav-container class="main-container">
+  <mat-sidenav mode="side" opened @if(auth.isLoggedIn())>
+    <a mat-button routerLink="/dashboard">Dashboard</a>
+    <a mat-button routerLink="/upload">Upload</a>
+    <a mat-button routerLink="/reports">Reports</a>
+    <a mat-button routerLink="/stocks">Stocks</a>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
